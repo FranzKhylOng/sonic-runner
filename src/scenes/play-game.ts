@@ -1,14 +1,8 @@
-import game from "../kaplayCtx";
 import { makeSonic } from "../entities/sonic";
+import game from "../kaplayCtx";
 
-export default function mainMenu() {
-  if (!game.getData("bestScore")) {
-    game.setData("bestScore", 0);
-  }
-
-  game.onButtonPress("jump", () => {
-    game.go("playGame");
-  });
+export default function playGame() {
+  game.setGravity(3100); //the gravity won't do anything if you do not have entities with a body component
 
   const bgWidth = 1920;
   const platformWidth = 1280;
@@ -44,22 +38,24 @@ export default function mainMenu() {
     ]),
   ];
 
-  game.add([
-    game.text("Sonic Runner", { font: "mania", size: 108 }),
-    game.pos(game.center().x, 200), // by pixels, if 1080 is the height of the canvas, y=0 is top and y=1080 is bottom
-    game.anchor("center"), //center the text, the default origin of the object is top left
-  ]);
+  const sonic = makeSonic(game.vec2(200, 745));
+  sonic.setControls();
+  sonic.setEvents();
+
+  let gameSpeed = 300;
+
+  game.loop(1, () => {
+    gameSpeed += 50;
+  });
 
   game.add([
-    game.text("Press SPACE/Click/Touch to Start", { font: "mania", size: 36 }),
-    game.pos(game.center().x, game.center().y - 200),
-    game.anchor("center"),
+    game.rect(1920, 300),
+    game.opacity(0),
+    game.area(), //enables collision detection
+    game.pos(0, 832), //y value that matches the platform sprite
+    game.body({ isStatic: true }), //enables physics
   ]);
 
-  makeSonic(game.vec2(200, 745)); //x and y position of sonic
-
-  //i think we can extract the repeated logic into a function
-  //function to run every frame
   game.onUpdate(() => {
     // Parallax effect when a foreground element moves at a different speed than a background element
     // Check if the second bg piece is off screen
@@ -77,7 +73,7 @@ export default function mainMenu() {
     backgrounds[1].move(-100, 0);
 
     if (platforms[1].pos.x < -platformWidth) {
-      platforms[0].moveTo(platforms[1].pos.x + platformWidth * 2, 450);
+      platforms[0].moveTo(platforms[1].pos.x + platformWidth, 450);
       const shiftedPlatform = platforms.shift();
 
       if (shiftedPlatform) {
@@ -85,7 +81,7 @@ export default function mainMenu() {
       }
     }
 
-    platforms[0].move(-4000, 0);
-    platforms[1].move(-4000, 0);
+    platforms[0].move(-gameSpeed, 0);
+    platforms[1].move(-gameSpeed, 0);
   });
 }

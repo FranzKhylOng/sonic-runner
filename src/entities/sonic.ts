@@ -9,5 +9,30 @@ export function makeSonic(pos: Vec2) {
     game.area(), //to have automatic hitbox
     game.anchor("center"), //the default origin of the object is top left, we do this tp position along the center
     game.pos(pos),
+    game.body({ jumpForce: 1700 }), //enables physics
+    {
+      //extra properties/methods
+      setControls() {
+        game.onButtonPress("jump", () => {
+          // @ts-ignore
+          if (this.isGrounded()) {
+            // @ts-ignore
+            this.play("jump"); //play the jump animation
+            // @ts-ignore
+            this.jump(); //builtin function to jump
+            game.play("jump", { volume: 0.5 }); //play the jump sound
+          }
+        });
+      },
+      setEvents() {
+        // @ts-ignore
+        this.onGround(() => {
+          // @ts-ignore
+          this.play("run"); //play the run animation
+        });
+      },
+    },
   ]);
+
+  return sonic;
 }
