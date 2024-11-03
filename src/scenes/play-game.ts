@@ -1,3 +1,4 @@
+import { makeMotobug } from "../entities/motobug";
 import { makeSonic } from "../entities/sonic";
 import game from "../kaplayCtx";
 
@@ -45,8 +46,29 @@ export default function playGame() {
   let gameSpeed = 300;
 
   game.loop(1, () => {
-    gameSpeed += 50;
+    if (gameSpeed < 4000) gameSpeed += 50;
   });
+
+  const spawnMotobug = () => {
+    //motobug is 32x32, so we need to adjust the x,y value to spawn it off screen and at above the platform
+    const motobug = makeMotobug(game.vec2(1950, 773));
+
+    motobug.onUpdate(() => {
+      if (gameSpeed < 3000) {
+        motobug.move(-gameSpeed + 50, 0); //move the motobug faster than the game speed to have effect where the motobug is at a different speed than the event
+      }
+      motobug.move(-gameSpeed, 0);
+    });
+
+    motobug.onExitScreen(() => {
+      if (motobug.pos.x < -32) motobug.destroy();
+    });
+
+    const waitTime = game.rand(1, 3);
+    game.wait(waitTime, spawnMotobug); //recursively call the function to spawn another motobug infinitely
+  };
+
+  spawnMotobug();
 
   game.add([
     game.rect(1920, 300),

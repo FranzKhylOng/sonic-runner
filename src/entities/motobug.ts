@@ -8,7 +8,7 @@ export function makeMotobug(pos: Vec2) {
     game.scale(4),
     game.anchor("center"),
     game.pos(pos),
-    game.offscreen(), //compontnet that grants us method to check when enemy is offscreen
+    game.offscreen(), //component that grants us method to check when enemy is offscreen
     "enemy", //tag for enemies
   ]);
 }
