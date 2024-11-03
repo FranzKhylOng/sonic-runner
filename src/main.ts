@@ -1,4 +1,5 @@
 import game from "./kaplayCtx";
+import gameOver from "./scenes/game-over";
 import mainMenu from "./scenes/main-menu";
 import playGame from "./scenes/play-game"; //maybe have an index file for scenes
 
@@ -34,10 +35,10 @@ game.loadSound("hurt", "sounds/Hurt.wav");
 game.loadSound("hyperRing", "sounds/HyperRing.wav");
 game.loadSound("jump", "sounds/Jump.wav");
 game.loadSound("ring", "sounds/Ring.wav");
-game.loadSound("city", "sounds/city.mp3");
+game.loadSound("bg", "sounds/bg.mp3");
 
 game.scene("mainMenu", mainMenu); //we are setting what's the scene function but not calling it
 game.scene("playGame", playGame);
-game.scene("gameOver", () => {});
+game.scene("gameOver", gameOver);
 
 game.go("mainMenu"); //go to the main scene

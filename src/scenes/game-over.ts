@@ -1,10 +1,13 @@
 import game from "../kaplayCtx";
 import { makeSonic } from "../entities/sonic";
 
-export default function mainMenu() {
-  game.play("bg", { volume: 0.2, loop: true });
-  if (!game.getData("bestScore")) {
-    game.setData("bestScore", 0);
+export default function gameOver(score: number) {
+  game.setGravity(0);
+
+  let bestScore: number | null = game.getData("bestScore");
+
+  if (bestScore! < score) {
+    game.setData("bestScore", score);
   }
 
   game.onButtonPress("jump", () => {
@@ -46,13 +49,16 @@ export default function mainMenu() {
   ];
 
   game.add([
-    game.text("Sonic Runner", { font: "mania", size: 108 }),
+    game.text("Game Over", { font: "mania", size: 108 }),
     game.pos(game.center().x, 200), // by pixels, if 1080 is the height of the canvas, y=0 is top and y=1080 is bottom
     game.anchor("center"), //center the text, the default origin of the object is top left
   ]);
 
   game.add([
-    game.text("Press SPACE/Click/Touch to Start", { font: "mania", size: 36 }),
+    game.text(`Press SPACE/Click/Touch to Play Again. Best Score: ${score}`, {
+      font: "mania",
+      size: 36,
+    }),
     game.pos(game.center().x, game.center().y - 200),
     game.anchor("center"),
   ]);

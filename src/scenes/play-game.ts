@@ -68,7 +68,7 @@ export default function playGame() {
     }
 
     game.play("hurt", { volume: 0.5 });
-    game.go("gameOver");
+    game.go("gameOver", score);
   });
 
   sonic.onCollide("ring", (ring) => {
