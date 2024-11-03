@@ -1,4 +1,4 @@
-import { Vec2 } from "kaplay";
+import { Vec2, GameObj } from "kaplay";
 import game from "../kaplayCtx";
 
 export function makeSonic(pos: Vec2) {
@@ -12,6 +12,7 @@ export function makeSonic(pos: Vec2) {
     game.body({ jumpForce: 1700 }), //enables physics
     {
       //extra properties/methods
+      ringCollectUi: null as GameObj | null,
       setControls() {
         game.onButtonPress("jump", () => {
           // @ts-ignore
@@ -24,16 +25,14 @@ export function makeSonic(pos: Vec2) {
           }
         });
         game.onButtonDown("left", () => {
-          if (pos.x > 0) {
-            // @ts-ignore
-            this.move(-500, 0); //move left
-            // @ts-ignore
-            this.scale.x = -4; //flip the sprite
-          }
+          // @ts-ignore
+          this.move(-1000, 0); //move left
+          // @ts-ignore
+          // this.scale.x = -4; //flip the sprite
         });
         game.onButtonDown("right", () => {
           // @ts-ignore
-          this.move(500, 0); //move right
+          this.move(1000, 0); //move right
           // @ts-ignore
           this.scale.x = 4; //flip the sprite
         });
@@ -46,6 +45,13 @@ export function makeSonic(pos: Vec2) {
         });
       },
     },
+  ]);
+
+  sonic.ringCollectUi = sonic.add([
+    game.text("", { font: "mania", size: 24 }),
+    game.color(255, 255, 0),
+    game.anchor("center"),
+    game.pos(30, -10),
   ]);
 
   return sonic;

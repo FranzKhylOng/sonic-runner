@@ -9,7 +9,6 @@ export default function playGame() {
   const bgWidth = 1920;
   const platformWidth = 1280;
   let score = 0;
-  let scoreMultiplier = 1;
 
   const backgrounds = [
     //game.add creates a new entity/object for the game
@@ -42,6 +41,10 @@ export default function playGame() {
     ]),
   ];
 
+  const scoreText = game.add([
+    game.text("Score: 0", { font: "mania", size: 72 }),
+    game.pos(20, 20),
+  ]);
   const sonic = makeSonic(game.vec2(200, 745));
   sonic.setControls();
   sonic.setEvents();
@@ -54,7 +57,13 @@ export default function playGame() {
       game.destroy(enemy);
       sonic.play("jump");
       sonic.jump();
+      score += 5;
+      scoreText.text = `Score: ${score}`;
 
+      sonic.ringCollectUi!.text = "+5";
+      game.wait(1, () => {
+        sonic.ringCollectUi!.text = "";
+      });
       return;
     }
 
@@ -64,11 +73,16 @@ export default function playGame() {
 
   sonic.onCollide("ring", (ring) => {
     game.play("ring", { volume: 0.5 });
+    sonic.ringCollectUi!.text = "+1";
+    game.wait(1, () => {
+      sonic.ringCollectUi!.text = "";
+    });
     game.destroy(ring);
     score++;
+    scoreText.text = `Score: ${score}`;
   });
 
-  let gameSpeed = 300;
+  let gameSpeed = 500;
 
   game.loop(1, () => {
     if (gameSpeed < 4000) gameSpeed += 50;
@@ -98,9 +112,6 @@ export default function playGame() {
     const ring = makeRing(game.vec2(1950, 773));
 
     ring.onUpdate(() => {
-      if (gameSpeed < 3000) {
-        ring.move(-gameSpeed + 50, 0); //move the ring faster than the game speed to have effect where the ring is at a different speed than the event
-      }
       ring.move(-gameSpeed, 0);
     });
 
