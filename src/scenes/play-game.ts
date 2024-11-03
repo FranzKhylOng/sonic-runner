@@ -42,6 +42,23 @@ export default function playGame() {
   const sonic = makeSonic(game.vec2(200, 745));
   sonic.setControls();
   sonic.setEvents();
+  //game objects have access to this method, checking if it collides with any object with the specified tag
+  sonic.onCollide("enemy", (enemy) => {
+    //we can pass the entity that sonic collides with as an argument
+    console.log("collided with enemy");
+    if (!sonic.isGrounded()) {
+      game.play("destroy", { volume: 0.5 });
+      game.play("hyperRing", { volume: 0.5 });
+      game.destroy(enemy);
+      sonic.play("jump");
+      sonic.jump();
+
+      return;
+    }
+
+    game.play("hurt", { volume: 0.5 });
+    game.go("gameOver");
+  });
 
   let gameSpeed = 300;
 
