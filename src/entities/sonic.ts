@@ -23,6 +23,20 @@ export function makeSonic(pos: Vec2) {
             game.play("jump", { volume: 0.5 }); //play the jump sound
           }
         });
+        game.onButtonDown("left", () => {
+          if (pos.x > 0) {
+            // @ts-ignore
+            this.move(-500, 0); //move left
+            // @ts-ignore
+            this.scale.x = -4; //flip the sprite
+          }
+        });
+        game.onButtonDown("right", () => {
+          // @ts-ignore
+          this.move(500, 0); //move right
+          // @ts-ignore
+          this.scale.x = 4; //flip the sprite
+        });
       },
       setEvents() {
         // @ts-ignore

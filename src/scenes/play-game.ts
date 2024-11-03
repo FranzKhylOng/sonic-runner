@@ -116,6 +116,22 @@ export default function playGame() {
   spawnMotobug();
 
   game.add([
+    game.rect(1, 1080),
+    game.opacity(0),
+    game.area(),
+    game.pos(-1, 0),
+    game.body({ isStatic: true }),
+  ]);
+
+  game.add([
+    game.rect(1, 1080),
+    game.opacity(0),
+    game.area(),
+    game.pos(1921, 0),
+    game.body({ isStatic: true }),
+  ]);
+
+  game.add([
     game.rect(1920, 300),
     game.opacity(0),
     game.area(), //enables collision detection

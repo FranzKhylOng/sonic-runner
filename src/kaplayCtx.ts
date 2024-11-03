@@ -12,6 +12,12 @@ const game = kaplay({
       keyboard: ["space"],
       mouse: "left",
     },
+    left: {
+      keyboard: ["left"],
+    },
+    right: {
+      keyboard: ["right"],
+    },
   },
   debugKey: "d",
   debug: true,
