@@ -1,4 +1,5 @@
 import { makeMotobug } from "../entities/motobug";
+import { makeRing } from "../entities/ring";
 import { makeSonic } from "../entities/sonic";
 import game from "../kaplayCtx";
 
@@ -7,6 +8,8 @@ export default function playGame() {
 
   const bgWidth = 1920;
   const platformWidth = 1280;
+  let score = 0;
+  let scoreMultiplier = 1;
 
   const backgrounds = [
     //game.add creates a new entity/object for the game
@@ -45,7 +48,6 @@ export default function playGame() {
   //game objects have access to this method, checking if it collides with any object with the specified tag
   sonic.onCollide("enemy", (enemy) => {
     //we can pass the entity that sonic collides with as an argument
-    console.log("collided with enemy");
     if (!sonic.isGrounded()) {
       game.play("destroy", { volume: 0.5 });
       game.play("hyperRing", { volume: 0.5 });
@@ -58,6 +60,12 @@ export default function playGame() {
 
     game.play("hurt", { volume: 0.5 });
     game.go("gameOver");
+  });
+
+  sonic.onCollide("ring", (ring) => {
+    game.play("ring", { volume: 0.5 });
+    game.destroy(ring);
+    score++;
   });
 
   let gameSpeed = 300;
@@ -81,10 +89,30 @@ export default function playGame() {
       if (motobug.pos.x < -32) motobug.destroy();
     });
 
-    const waitTime = game.rand(1, 3);
+    const waitTime = game.rand(1, 3); //could be an argument for modularity
     game.wait(waitTime, spawnMotobug); //recursively call the function to spawn another motobug infinitely
   };
 
+  const spawnRing = () => {
+    //motobug is 32x32, so we need to adjust the x,y value to spawn it off screen and at above the platform
+    const ring = makeRing(game.vec2(1950, 773));
+
+    ring.onUpdate(() => {
+      if (gameSpeed < 3000) {
+        ring.move(-gameSpeed + 50, 0); //move the ring faster than the game speed to have effect where the ring is at a different speed than the event
+      }
+      ring.move(-gameSpeed, 0);
+    });
+
+    ring.onExitScreen(() => {
+      if (ring.pos.x < -32) ring.destroy();
+    });
+
+    const waitTime = game.rand(0.5, 3.5); //could be an argument for modularity
+    game.wait(waitTime, spawnRing); //recursively call the function to spawn another motobug infinitely
+  };
+
+  spawnRing();
   spawnMotobug();
 
   game.add([
