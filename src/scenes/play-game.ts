@@ -1,3 +1,4 @@
+import { makeBuzzBomber } from "../entities/buzz-bomber";
 import { makeMotobug } from "../entities/motobug";
 import { makeRing } from "../entities/ring";
 import { makeSonic } from "../entities/sonic";
@@ -71,6 +72,11 @@ export default function playGame() {
     game.go("gameOver", score);
   });
 
+  sonic.onCollide("flyingEnemy", () => {
+    game.play("hurt", { volume: 0.5 });
+    game.go("gameOver", score);
+  });
+
   sonic.onCollide("ring", (ring) => {
     game.play("ring", { volume: 0.5 });
     sonic.ringCollectUi!.text = "+1";
@@ -87,7 +93,7 @@ export default function playGame() {
   game.loop(1, () => {
     if (gameSpeed < 4000) gameSpeed += 50;
   });
-
+  //adjust max speed
   const spawnMotobug = () => {
     //motobug is 32x32, so we need to adjust the x,y value to spawn it off screen and at above the platform
     const motobug = makeMotobug(game.vec2(1950, 773));
@@ -105,6 +111,25 @@ export default function playGame() {
 
     const waitTime = game.rand(1, 3); //could be an argument for modularity
     game.wait(waitTime, spawnMotobug); //recursively call the function to spawn another motobug infinitely
+  };
+
+  const spawnBuzzBomber = () => {
+    //motobug is 32x32, so we need to adjust the x,y value to spawn it off screen and at above the platform
+    const buzzBomber = makeBuzzBomber(game.vec2(1950, 200));
+
+    buzzBomber.onUpdate(() => {
+      if (gameSpeed < 3000) {
+        buzzBomber.move(-gameSpeed + 25, 0); //move the buzzBomber faster than the game speed to have effect where the buzzBomber is at a different speed than the event
+      }
+      buzzBomber.move(-gameSpeed, 0);
+    });
+
+    buzzBomber.onExitScreen(() => {
+      if (buzzBomber.pos.x < -32) buzzBomber.destroy();
+    });
+
+    const waitTime = game.rand(3, 6); //could be an argument for modularity
+    game.wait(waitTime, spawnBuzzBomber); //recursively call the function to spawn another buzzBomber infinitely
   };
 
   const spawnRing = () => {
@@ -125,6 +150,9 @@ export default function playGame() {
 
   spawnRing();
   spawnMotobug();
+  // if (gameSpeed > 1500) {
+  spawnBuzzBomber();
+  // }
 
   game.add([
     game.rect(1, 1080),
