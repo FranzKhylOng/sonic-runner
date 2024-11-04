@@ -99,7 +99,7 @@ export default function playGame() {
     const motobug = makeMotobug(game.vec2(1950, 773));
 
     motobug.onUpdate(() => {
-      if (gameSpeed < 3000) {
+      if (gameSpeed < 1500) {
         motobug.move(-gameSpeed + 50, 0); //move the motobug faster than the game speed to have effect where the motobug is at a different speed than the event
       }
       motobug.move(-gameSpeed, 0);
@@ -115,17 +115,19 @@ export default function playGame() {
 
   const spawnBuzzBomber = () => {
     //motobug is 32x32, so we need to adjust the x,y value to spawn it off screen and at above the platform
-    const buzzBomber = makeBuzzBomber(game.vec2(1950, 200));
+    game.wait(1, () => {
+      const buzzBomber = makeBuzzBomber(game.vec2(1950, 220));
 
-    buzzBomber.onUpdate(() => {
-      if (gameSpeed < 3000) {
-        buzzBomber.move(-gameSpeed + 25, 0); //move the buzzBomber faster than the game speed to have effect where the buzzBomber is at a different speed than the event
-      }
-      buzzBomber.move(-gameSpeed, 0);
-    });
+      buzzBomber.onUpdate(() => {
+        if (gameSpeed < 1500) {
+          buzzBomber.move(-gameSpeed + 25, 0); //move the buzzBomber faster than the game speed to have effect where the buzzBomber is at a different speed than the event
+        }
+        buzzBomber.move(-gameSpeed, 0);
+      });
 
-    buzzBomber.onExitScreen(() => {
-      if (buzzBomber.pos.x < -32) buzzBomber.destroy();
+      buzzBomber.onExitScreen(() => {
+        if (buzzBomber.pos.x < -32) buzzBomber.destroy();
+      });
     });
 
     const waitTime = game.rand(3, 6); //could be an argument for modularity

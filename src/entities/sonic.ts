@@ -6,7 +6,7 @@ export function makeSonic(pos: Vec2) {
   const sonic = game.add([
     game.sprite("sonic", { anim: "run" }), //set default animation to run
     game.scale(4),
-    game.area(), //to have automatic hitbox
+    game.area({ shape: new game.Rect(game.vec2(0, 2), 30, 32) }), //to have automatic hitbox
     game.anchor("center"), //the default origin of the object is top left, we do this tp position along the center
     game.pos(pos),
     game.body({ jumpForce: 1700 }), //enables physics
