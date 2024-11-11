@@ -2,8 +2,6 @@ import { Vec2, GameObj, Shape } from "kaplay";
 import game from "../kaplayCtx";
 
 export class GameEntity {
-  //the tag is used for the library to easily identify the entity for other game events
-  //the offscreen component grants us a method to check when the entity is offscreen
   protected obj: GameObj;
 
   constructor(
@@ -19,8 +17,8 @@ export class GameEntity {
       game.scale(4),
       game.anchor("center"),
       game.pos(spawnPoint),
-      game.offscreen(),
-      entityTag,
+      game.offscreen(), //grants us a method to check when the entity is offscreen
+      entityTag, //used for the library to easily identify which entity is used to trigger other game events
     ]);
   }
 

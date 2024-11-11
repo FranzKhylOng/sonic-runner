@@ -32,7 +32,7 @@ game.loadSprite("buzzbomber", "graphics/buzzbomber.png", {
   sliceX: 4,
   sliceY: 1,
   anims: {
-    run: { from: 0, to: 3, loop: true, speed: 8 },
+    fly: { from: 0, to: 3, loop: true, speed: 8 },
   },
 });
 

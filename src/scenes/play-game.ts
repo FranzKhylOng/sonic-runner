@@ -1,4 +1,4 @@
-import { makeBuzzBomber } from "../entities/buzz-bomber";
+import { BuzzBomber } from "../entities/buzz-bomber";
 import { MotoBug } from "../entities/motobug";
 import { makeRing } from "../entities/ring";
 import { makeSonic } from "../entities/sonic";
@@ -117,7 +117,7 @@ export default function playGame() {
   const spawnBuzzBomber = () => {
     //motobug is 32x32, so we need to adjust the x,y value to spawn it off screen and at above the platform
     game.wait(1, () => {
-      const buzzBomber = makeBuzzBomber(game.vec2(1950, 220));
+      const buzzBomber = new BuzzBomber(game.vec2(1950, 220)).getEntity();
 
       buzzBomber.onUpdate(() => {
         if (gameSpeed < 1500) {
