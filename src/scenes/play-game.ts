@@ -1,5 +1,5 @@
 import { makeBuzzBomber } from "../entities/buzz-bomber";
-import { makeMotobug } from "../entities/motobug";
+import { MotoBug } from "../entities/motobug";
 import { makeRing } from "../entities/ring";
 import { makeSonic } from "../entities/sonic";
 import game from "../kaplayCtx";
@@ -97,7 +97,7 @@ export default function playGame() {
   //adjust max speed
   const spawnMotobug = () => {
     //motobug is 32x32, so we need to adjust the x,y value to spawn it off screen and at above the platform
-    const motobug = makeMotobug(game.vec2(1950, 773));
+    const motobug = new MotoBug(game.vec2(1950, 773)).getEntity();
 
     motobug.onUpdate(() => {
       if (gameSpeed < 1500) {
