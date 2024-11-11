@@ -69,7 +69,8 @@ export default function playGame() {
     }
 
     game.play("hurt", { volume: 0.5 });
-    game.go("gameOver", score);
+    game.setData("score", score);
+    game.go("gameOver");
   });
 
   sonic.onCollide("flyingEnemy", () => {
@@ -187,10 +188,7 @@ export default function playGame() {
       // Move the first bg piece to the right of the second bg piece
       backgrounds[0].moveTo(backgrounds[1].pos.x + bgWidth * 2, 0);
       const shiftedBg = backgrounds.shift(); // Remove the first bg piece from the array and return it
-
-      if (shiftedBg) {
-        backgrounds.push(shiftedBg); // Add the first bg piece to the end of the array to reset the indexes
-      }
+      backgrounds.push(shiftedBg!); // Add the first bg piece to the end of the array to reset the indexes
     }
 
     backgrounds[0].move(-100, 0);

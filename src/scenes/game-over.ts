@@ -1,14 +1,16 @@
 import game from "../kaplayCtx";
 import { makeSonic } from "../entities/sonic";
 
-export default function gameOver(score: number) {
+export default function gameOver() {
   game.setGravity(0);
 
   let bestScore: number | null = game.getData("bestScore");
 
-  if (bestScore! < score) {
-    game.setData("bestScore", score);
-  }
+  const score: number | null = game.getData("score");
+
+  if (!bestScore) bestScore = score;
+
+  if (bestScore! < score!) game.setData("bestScore", score);
 
   game.onButtonPress("jump", () => {
     game.go("playGame");
