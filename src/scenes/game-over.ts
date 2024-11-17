@@ -1,5 +1,5 @@
 import game from "../kaplayCtx";
-import { makeSonic } from "../entities/sonic";
+import { Sonic } from "../entities/sonic";
 
 export default function gameOver() {
   game.setGravity(0);
@@ -65,7 +65,7 @@ export default function gameOver() {
     game.anchor("center"),
   ]);
 
-  makeSonic(game.vec2(200, 745)); //x and y position of sonic
+  new Sonic(game.vec2(200, 745)); //x and y position of sonic
 
   //i think we can extract the repeated logic into a function
   //function to run every frame

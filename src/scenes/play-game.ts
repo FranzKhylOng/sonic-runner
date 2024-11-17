@@ -1,7 +1,8 @@
+import { GameObj } from "kaplay";
 import { BuzzBomber } from "../entities/buzz-bomber";
 import { MotoBug } from "../entities/motobug";
 import { Ring } from "../entities/ring";
-import { makeSonic } from "../entities/sonic";
+import { Sonic } from "../entities/sonic";
 import game from "../kaplayCtx";
 
 export default function playGame() {
@@ -46,43 +47,47 @@ export default function playGame() {
     game.text("Score: 0", { font: "mania", size: 72 }),
     game.pos(20, 20),
   ]);
-  const sonic = makeSonic(game.vec2(200, 745));
+  const sonic = new Sonic(game.vec2(200, 745));
+  const sonicEntity = sonic.getEntity();
+
+  sonic.setPointsUi();
   sonic.setControls();
   sonic.setEvents();
   //game objects have access to this method, checking if it collides with any object with the specified tag
-  sonic.onCollide("enemy", (enemy) => {
+  sonicEntity.onCollide("enemy", (enemy: GameObj) => {
     //we can pass the entity that sonic collides with as an argument
-    if (!sonic.isGrounded()) {
+    if (!sonicEntity.isGrounded()) {
       game.play("destroy", { volume: 0.5 });
       game.play("hyperRing", { volume: 0.5 });
       game.destroy(enemy);
-      sonic.play("jump");
-      sonic.jump();
-      score += 5;
+      sonicEntity.play("jump");
+      sonicEntity.jump();
+      score = score + 5; //issue
       scoreText.text = `Score: ${score}`;
 
-      sonic.ringCollectUi!.text = "+5";
+      sonicEntity.plusPoints!.text = "+5";
       game.wait(1, () => {
-        sonic.ringCollectUi!.text = "";
+        sonicEntity.plusPoints!.text = "";
       });
       return;
     }
-
+    console.log(score);
     game.play("hurt", { volume: 0.5 });
+
     game.setData("score", score);
     game.go("gameOver");
   });
 
-  sonic.onCollide("flyingEnemy", () => {
+  sonicEntity.onCollide("flyingEnemy", () => {
     game.play("hurt", { volume: 0.5 });
     game.go("gameOver", score);
   });
 
-  sonic.onCollide("ring", (ring) => {
+  sonicEntity.onCollide("ring", (ring: GameObj) => {
     game.play("ring", { volume: 0.5 });
-    sonic.ringCollectUi!.text = "+1";
+    sonicEntity.plusPoints!.text = "+1";
     game.wait(1, () => {
-      sonic.ringCollectUi!.text = "";
+      sonicEntity.plusPoints!.text = "";
     });
     game.destroy(ring);
     score++;
