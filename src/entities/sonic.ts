@@ -16,6 +16,10 @@ export class Sonic extends GameEntity {
         jumpForce: 1700,
       }
     );
+
+    this.setPointsUi();
+    this.setControls();
+    this.setEvents();
   }
 
   setPointsUi() {

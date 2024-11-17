@@ -47,27 +47,23 @@ export default function playGame() {
     game.text("Score: 0", { font: "mania", size: 72 }),
     game.pos(20, 20),
   ]);
-  const sonic = new Sonic(game.vec2(200, 745));
-  const sonicEntity = sonic.getEntity();
+  const sonic = new Sonic(game.vec2(200, 745)).getEntity();
 
-  sonic.setPointsUi();
-  sonic.setControls();
-  sonic.setEvents();
   //game objects have access to this method, checking if it collides with any object with the specified tag
-  sonicEntity.onCollide("enemy", (enemy: GameObj) => {
+  sonic.onCollide("enemy", (enemy: GameObj) => {
     //we can pass the entity that sonic collides with as an argument
-    if (!sonicEntity.isGrounded()) {
+    if (!sonic.isGrounded()) {
       game.play("destroy", { volume: 0.5 });
       game.play("hyperRing", { volume: 0.5 });
       game.destroy(enemy);
-      sonicEntity.play("jump");
-      sonicEntity.jump();
+      sonic.play("jump");
+      sonic.jump();
       score = score + 5; //issue
       scoreText.text = `Score: ${score}`;
 
-      sonicEntity.plusPoints!.text = "+5";
+      sonic.plusPoints!.text = "+5";
       game.wait(1, () => {
-        sonicEntity.plusPoints!.text = "";
+        sonic.plusPoints!.text = "";
       });
       return;
     }
@@ -78,16 +74,16 @@ export default function playGame() {
     game.go("gameOver");
   });
 
-  sonicEntity.onCollide("flyingEnemy", () => {
+  sonic.onCollide("flyingEnemy", () => {
     game.play("hurt", { volume: 0.5 });
     game.go("gameOver", score);
   });
 
-  sonicEntity.onCollide("ring", (ring: GameObj) => {
+  sonic.onCollide("ring", (ring: GameObj) => {
     game.play("ring", { volume: 0.5 });
-    sonicEntity.plusPoints!.text = "+1";
+    sonic.plusPoints!.text = "+1";
     game.wait(1, () => {
-      sonicEntity.plusPoints!.text = "";
+      sonic.plusPoints!.text = "";
     });
     game.destroy(ring);
     score++;
