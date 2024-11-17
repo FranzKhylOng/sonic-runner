@@ -8,8 +8,8 @@ export class GameEntity {
     spriteSheet: string,
     defaultAnim: string,
     spawnPoint: Vec2,
-    hitboxSize: Shape,
-    entityTag: string
+    entityTag: string,
+    hitboxSize?: Shape
   ) {
     this.obj = game.add([
       game.sprite(spriteSheet, { anim: defaultAnim }),

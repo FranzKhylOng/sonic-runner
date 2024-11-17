@@ -1,6 +1,6 @@
 import { BuzzBomber } from "../entities/buzz-bomber";
 import { MotoBug } from "../entities/motobug";
-import { makeRing } from "../entities/ring";
+import { Ring } from "../entities/ring";
 import { makeSonic } from "../entities/sonic";
 import game from "../kaplayCtx";
 
@@ -137,7 +137,7 @@ export default function playGame() {
 
   const spawnRing = () => {
     //motobug is 32x32, so we need to adjust the x,y value to spawn it off screen and at above the platform
-    const ring = makeRing(game.vec2(1950, 773));
+    const ring = new Ring(game.vec2(1950, 773)).getEntity();
 
     ring.onUpdate(() => {
       ring.move(-gameSpeed, 0);

@@ -8,8 +8,8 @@ export class MotoBug extends GameEntity {
       "motobug",
       "run",
       spawnPoint,
-      new game.Rect(game.vec2(-5, 0), 32, 32),
-      "enemy"
+      "enemy",
+      new game.Rect(game.vec2(-5, 0), 32, 32)
     );
   }
 }
