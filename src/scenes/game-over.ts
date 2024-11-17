@@ -1,5 +1,6 @@
 import game from "../kaplayCtx";
 import { Sonic } from "../entities/sonic";
+import { createBackgrounds, createPlatforms, setupParallax } from "../utils";
 
 export function gameOver() {
   game.setGravity(0);
@@ -18,37 +19,10 @@ export function gameOver() {
 
   const bgWidth = 1920;
   const platformWidth = 1280;
+  const platformHeight = 450;
 
-  const backgrounds = [
-    //game.add creates a new entity/object for the game
-    game.add([
-      game.sprite("chemicalBg"),
-      game.pos(0, 0),
-      game.scale(2),
-      game.opacity(0.8),
-    ]),
-    game.add([
-      game.sprite("chemicalBg"),
-      game.pos(bgWidth * 2, 0), //put the second bg piece next to the first one for parallax effect, 2x for scale
-      game.scale(2),
-      game.opacity(0.8),
-    ]),
-  ];
-
-  const platforms = [
-    game.add([
-      game.sprite("platforms"),
-      game.pos(0, 450),
-      game.scale(4),
-      game.area(),
-    ]),
-    game.add([
-      game.sprite("platforms"),
-      game.pos(platformWidth * 4, 450),
-      game.scale(4),
-      game.area(),
-    ]),
-  ];
+  const backgrounds = createBackgrounds(bgWidth);
+  const platforms = createPlatforms(platformWidth, platformHeight);
 
   game.add([
     game.text("Game Over", { font: "mania", size: 108 }),
@@ -65,36 +39,8 @@ export function gameOver() {
     game.anchor("center"),
   ]);
 
-  new Sonic(game.vec2(200, 745)); //x and y position of sonic
+  new Sonic(game.vec2(200, 745));
 
-  //i think we can extract the repeated logic into a function
-  //function to run every frame
-  game.onUpdate(() => {
-    // Parallax effect when a foreground element moves at a different speed than a background element
-    // Check if the second bg piece is off screen
-    if (backgrounds[1].pos.x < -bgWidth) {
-      // Move the first bg piece to the right of the second bg piece
-      backgrounds[0].moveTo(backgrounds[1].pos.x + bgWidth * 2, 0);
-      const shiftedBg = backgrounds.shift(); // Remove the first bg piece from the array and return it
-
-      if (shiftedBg) {
-        backgrounds.push(shiftedBg); // Add the first bg piece to the end of the array to reset the indexes
-      }
-    }
-
-    backgrounds[0].move(-100, 0);
-    backgrounds[1].move(-100, 0);
-
-    if (platforms[1].pos.x < -platformWidth) {
-      platforms[0].moveTo(platforms[1].pos.x + platformWidth * 2, 450);
-      const shiftedPlatform = platforms.shift();
-
-      if (shiftedPlatform) {
-        platforms.push(shiftedPlatform);
-      }
-    }
-
-    platforms[0].move(-4000, 0);
-    platforms[1].move(-4000, 0);
-  });
+  setupParallax(backgrounds, bgWidth, 100, 0);
+  setupParallax(platforms, platformWidth, 4000, platformHeight);
 }
