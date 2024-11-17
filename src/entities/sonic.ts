@@ -11,7 +11,6 @@ export class Sonic extends GameEntity {
       "run",
       spawnPoint,
       "sonic",
-      true,
       new game.Rect(game.vec2(0, 2), 30, 32),
       {
         jumpForce: 1700,

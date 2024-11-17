@@ -9,7 +9,6 @@ export class BuzzBomber extends GameEntity {
       "fly",
       spawnPoint,
       "flyingEnemy",
-      false,
       new game.Rect(game.vec2(6, 0), 44, 24)
     );
   }
