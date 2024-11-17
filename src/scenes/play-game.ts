@@ -5,7 +5,7 @@ import { Ring } from "../entities/ring";
 import { Sonic } from "../entities/sonic";
 import game from "../kaplayCtx";
 
-export default function playGame() {
+export function playGame() {
   game.setGravity(3100); //the gravity won't do anything if you do not have entities with a body component
 
   const bgWidth = 1920;

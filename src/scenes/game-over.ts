@@ -1,7 +1,7 @@
 import game from "../kaplayCtx";
 import { Sonic } from "../entities/sonic";
 
-export default function gameOver() {
+export function gameOver() {
   game.setGravity(0);
 
   let bestScore: number | null = game.getData("bestScore");
