@@ -1,5 +1,6 @@
 import game from "../kaplayCtx";
 import { Sonic } from "../entities/sonic";
+import { bgWidth, platformWidth, platformHeight, gameSpeed } from "../config";
 import { createBackgrounds, createPlatforms, setupParallax } from "../utils";
 
 export function mainMenu() {
@@ -11,10 +12,6 @@ export function mainMenu() {
   game.onButtonPress("jump", () => {
     game.go("playGame");
   });
-
-  const bgWidth = 1920;
-  const platformWidth = 1280;
-  const platformHeight = 450;
 
   const backgrounds = createBackgrounds(bgWidth);
   const platforms = createPlatforms(platformWidth, platformHeight);
@@ -34,5 +31,5 @@ export function mainMenu() {
   new Sonic(game.vec2(200, 745));
 
   setupParallax(backgrounds, bgWidth, 100, 0);
-  setupParallax(platforms, platformWidth, 4000, platformHeight);
+  setupParallax(platforms, platformWidth, gameSpeed, platformHeight);
 }

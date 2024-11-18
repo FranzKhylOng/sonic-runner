@@ -10,8 +10,7 @@ export function setupParallax(
   game.onUpdate(() => {
     if (images[1].pos.x < -imageWidth) {
       images[0].moveTo(images[1].pos.x + imageWidth, yPos ?? images[0].pos.y);
-      const shiftedimage = images.shift();
-      images.push(shiftedimage!);
+      images.push(images.shift()!);
     }
 
     images[0].move(-moveSpeed, 0);
