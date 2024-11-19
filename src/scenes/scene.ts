@@ -17,11 +17,12 @@ export class Scene {
     setupParallax(this.platforms, platformWidth, gameSpeed, platformHeight);
   }
 
+  //Anchor center centers the text, the default origin of the object is top left
   addText(text: string, fontSize: number, x: number, y: number) {
     game.add([
       game.text(text, { font: "mania", size: fontSize }),
       game.pos(x, y),
-      game.anchor("center"),
+      game.anchor("center"), //maybe we could remove
     ]);
   }
 

@@ -6,12 +6,8 @@ export function mainMenu() {
   const scene = new Scene();
 
   scene.setupParallax();
-  scene.playMusic("bg", { volume: 0.2, loop: true });
   scene.setNextScene("playGame");
-
-  if (!game.getData("bestScore")) {
-    game.setData("bestScore", 0);
-  }
+  scene.playMusic("bg", { volume: 0.2, loop: true });
 
   scene.addText("Sonic Runner", 108, game.center().x, 200);
   scene.addText(
