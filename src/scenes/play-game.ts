@@ -6,6 +6,7 @@ import { Sonic } from "../entities/sonic";
 import game from "../kaplayCtx";
 import { createBackgrounds, createPlatforms, setupParallax } from "../utils";
 import { bgWidth, platformHeight, platformWidth } from "../config";
+import { spawnEntity } from "../utils/spawn-enemy";
 
 export function playGame() {
   game.setGravity(3100); //the gravity won't do anything if you do not have entities with a body component
@@ -63,67 +64,35 @@ export function playGame() {
     scoreText.text = `Score: ${score}`;
   });
 
-  let gameSpeed = 500;
+  let gameSpeed = 1000;
 
   game.loop(1, () => {
     if (gameSpeed < 4000) gameSpeed += 50;
   });
   //adjust max speed
-  const spawnMotobug = () => {
-    //motobug is 32x32, so we need to adjust the x,y value to spawn it off screen and at above the platform
-    const motobug = new MotoBug(game.vec2(1950, 773)).getEntity();
 
-    motobug.onUpdate(() => {
-      if (gameSpeed < 1500) {
-        motobug.move(-gameSpeed + 50, 0); //move the motobug faster than the game speed to have effect where the motobug is at a different speed than the event
-      }
-      motobug.move(-gameSpeed, 0);
-    });
+  const spawnMotobug = () =>
+    spawnEntity(
+      MotoBug,
+      { x: 1950, y: 773 },
+      gameSpeed,
+      25,
+      [1, 3],
+      spawnMotobug
+    );
 
-    motobug.onExitScreen(() => {
-      if (motobug.pos.x < -32) motobug.destroy();
-    });
+  const spawnBuzzBomber = () =>
+    spawnEntity(
+      BuzzBomber,
+      { x: 1950, y: 220 },
+      gameSpeed,
+      50,
+      [4, 8],
+      spawnBuzzBomber
+    );
 
-    const waitTime = game.rand(1, 3); //could be an argument for modularity
-    game.wait(waitTime, spawnMotobug); //recursively call the function to spawn another motobug infinitely
-  };
-
-  const spawnBuzzBomber = () => {
-    //motobug is 32x32, so we need to adjust the x,y value to spawn it off screen and at above the platform
-    game.wait(1, () => {
-      const buzzBomber = new BuzzBomber(game.vec2(1950, 220)).getEntity();
-
-      buzzBomber.onUpdate(() => {
-        if (gameSpeed < 1500) {
-          buzzBomber.move(-gameSpeed + 25, 0); //move the buzzBomber faster than the game speed to have effect where the buzzBomber is at a different speed than the event
-        }
-        buzzBomber.move(-gameSpeed, 0);
-      });
-
-      buzzBomber.onExitScreen(() => {
-        if (buzzBomber.pos.x < -32) buzzBomber.destroy();
-      });
-    });
-
-    const waitTime = game.rand(3, 6); //could be an argument for modularity
-    game.wait(waitTime, spawnBuzzBomber); //recursively call the function to spawn another buzzBomber infinitely
-  };
-
-  const spawnRing = () => {
-    //motobug is 32x32, so we need to adjust the x,y value to spawn it off screen and at above the platform
-    const ring = new Ring(game.vec2(1950, 773)).getEntity();
-
-    ring.onUpdate(() => {
-      ring.move(-gameSpeed, 0);
-    });
-
-    ring.onExitScreen(() => {
-      if (ring.pos.x < -32) ring.destroy();
-    });
-
-    const waitTime = game.rand(0.5, 3.5); //could be an argument for modularity
-    game.wait(waitTime, spawnRing); //recursively call the function to spawn another motobug infinitely
-  };
+  const spawnRing = () =>
+    spawnEntity(Ring, { x: 1950, y: 773 }, gameSpeed, 0, [0.5, 3.5], spawnRing);
 
   spawnRing();
   spawnMotobug();
