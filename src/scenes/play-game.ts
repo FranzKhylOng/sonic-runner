@@ -30,7 +30,9 @@ export function playGame() {
       game.destroy(enemy);
       sonic.play("jump");
       sonic.jump();
-      score = score + 5; //issue doesnt count for some reason only rings
+
+      score = score + 5;
+      game.setData("score", score);
       scoreText.text = `Score: ${score}`;
 
       sonic.plusPoints!.text = "+5";
@@ -39,16 +41,13 @@ export function playGame() {
       });
       return;
     }
-    console.log(score);
     game.play("hurt", { volume: 0.5 });
-
-    game.setData("score", score);
     game.go("gameOver");
   });
 
   sonic.onCollide("flyingEnemy", () => {
     game.play("hurt", { volume: 0.5 });
-    game.go("gameOver", score);
+    game.go("gameOver");
   });
 
   sonic.onCollide("ring", (ring: GameObj) => {
@@ -58,7 +57,9 @@ export function playGame() {
       sonic.plusPoints!.text = "";
     });
     game.destroy(ring);
+
     score++;
+    game.setData("score", score);
     scoreText.text = `Score: ${score}`;
   });
 

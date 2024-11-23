@@ -10,7 +10,7 @@ export function gameOver() {
 
   const score: number | null = game.getData("score");
 
-  if (!bestScore) bestScore = score;
+  if (!bestScore) game.setData("bestScore", score);
 
   if (bestScore! < score!) game.setData("bestScore", score);
 
@@ -19,7 +19,9 @@ export function gameOver() {
 
   scene.addText("Game Over", 108, game.center().x, 200);
   scene.addText(
-    `Press SPACE/Click/Touch to Play Again. Best Score: ${score}`,
+    `Press SPACE/Click/Touch to Play Again. Best Score: ${game.getData(
+      "bestScore"
+    )}`,
     36,
     game.center().x,
     game.center().y - 200
